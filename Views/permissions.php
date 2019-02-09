@@ -14,7 +14,7 @@
         <div class="tab-content">
             <div class="tab-body">GRUPOS DE PERMISSÕES</div>
             <div class="tab-body">
-                <a href="<?php echo BASE_URL.'/permissions/add'; ?>">Adicionar permissão</a>
+                <a class="button" href="<?php echo BASE_URL.'/permissions/add'; ?>">Adicionar permissão</a>
                 <table width="100%">
                     <tr>
                         <th>Nome da permissão</th>
