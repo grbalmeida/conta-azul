@@ -25,6 +25,7 @@ class HomeController extends Controller
     {
         $data = [];
         $data['company_name'] = $this->company->getName();
+        $data['user_email'] = $this->user->getEmail();
         $this->loadView('template', $data);
     }
 }

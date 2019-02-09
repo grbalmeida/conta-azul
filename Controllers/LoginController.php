@@ -32,4 +32,10 @@ class LoginController extends Controller
 
         $this->loadView('login', $data);
     }
+
+    public function logout(): void
+    {
+        $this->user->logout();
+        header('Location: '.BASE_URL);
+    }
 }
