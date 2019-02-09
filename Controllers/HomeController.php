@@ -4,6 +4,7 @@ namespace Controllers;
 
 use \Core\Controller;
 use \Models\User;
+use \Models\Company;
 
 class HomeController extends Controller
 {
@@ -12,6 +13,8 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->user = new User();
+        $this->user->setLoggedUser();
+        $this->company = new Company($this->user->getCompany());
 
         if (!$this->user->isLoggedIn()) {
             header('Location: '.BASE_URL.'/login');
@@ -20,6 +23,8 @@ class HomeController extends Controller
 
     public function index(): void
     {
-        $this->loadTemplate('home', []);
+        $data = [];
+        $data['company_name'] = $this->company->getName();
+        $this->loadView('template', $data);
     }
 }
