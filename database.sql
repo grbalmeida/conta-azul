@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS conta_azul;
 CREATE DATABASE conta_azul;
+USE conta_azul;
 
 CREATE TABLE groups(
   id int primary key auto_increment,
@@ -95,3 +96,41 @@ CREATE TABLE purchases_has_products(
   purchase_price float not null,
   foreign key (purchase_id) references purchases(id)
 );
+
+CREATE TABLE companies(
+  id int primary key auto_increment,
+  name varchar(100) not null
+);
+
+ALTER TABLE groups ADD COLUMN company_id int not null;
+ALTER TABLE groups ADD CONSTRAINT fk_group_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE permissions ADD COLUMN company_id int not null;
+ALTER TABLE groups ADD CONSTRAINT fk_permission_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE groups_has_permissions ADD COLUMN company_id int not null;
+ALTER TABLE groups_has_permissions ADD CONSTRAINT fk_group_has_permissions_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE users ADD COLUMN company_id int not null;
+ALTER TABLE users ADD CONSTRAINT fk_user_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE customers ADD COLUMN company_id int not null;
+ALTER TABLE customers ADD CONSTRAINT fk_customer_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE inventory ADD COLUMN company_id int not null;
+ALTER TABLE inventory ADD CONSTRAINT fk_inventory_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE inventory_history ADD COLUMN company_id int not null;
+ALTER TABLE inventory_history ADD CONSTRAINT fk_inventory_history_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE sales ADD COLUMN company_id int not null;
+ALTER TABLE sales ADD CONSTRAINT fk_sale_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE sales_has_products ADD COLUMN company_id int not null;
+ALTER TABLE sales_has_products ADD CONSTRAINT fk_sale_product_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE purchases ADD COLUMN company_id int not null;
+ALTER TABLE purchases ADD CONSTRAINT fk_purchase_company FOREIGN KEY (company_id) REFERENCES companies (id);
+
+ALTER TABLE purchases_has_products ADD COLUMN company_id int not null;
+ALTER TABLE purchases_has_products ADD CONSTRAINT fk_purchase_product_company FOREIGN KEY (company_id) REFERENCES companies (id);
