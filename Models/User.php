@@ -3,13 +3,16 @@
 namespace Models;
 
 use \Core\Model;
+use \Models\Permission;
 
 class User extends Model
 {
     private $user_info;
+    private $permission;
 
     public function __construct()
     {
+        $this->permission = new Permission();
         parent::__construct();
     }
 
@@ -37,19 +40,25 @@ class User extends Model
 
     public function setLoggedUser(): void
     {
-        $sql = 'SELECT name, email, company_id FROM users WHERE id = :id';
+        $sql = 'SELECT name, email, company_id, group_id FROM users WHERE id = :id';
         $sql = $this->database->prepare($sql);
         $sql->bindValue(':id', $_SESSION['user_id']);
         $sql->execute();
 
         if ($sql->rowCount() > 0) {
             $this->user_info = $sql->fetch(\PDO::FETCH_ASSOC);
+            $this->permission->setGroup($this->user_info['group_id'], $this->user_info['company_id']);
         }
     }
 
     public function logout(): void
     {
         session_destroy();
+    }
+
+    public function hasPermission(string $name): bool
+    {
+        return $this->permission->hasPermission($name);
     }
 
     public function getCompany(): int
