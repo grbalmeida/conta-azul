@@ -12,7 +12,35 @@
             <div class="tab-item">Permissões</div>
         </div>
         <div class="tab-content">
-            <div class="tab-body">GRUPOS DE PERMISSÕES</div>
+            <div class="tab-body">
+                <a class="button" href="<?php echo BASE_URL.'/permissions/add_group'; ?>">Adicionar grupo de permissão</a>
+                    <table width="100%">
+                        <tr>
+                            <th>Nome do grupo de permissões</th>
+                            <th>Ações</th>
+                        </tr>
+                       <?php foreach ($permissions_group_list as $group_permission): ?>
+                            <tr>
+                                <td><?php echo $group_permission['name']; ?></td>
+                                <td>
+                                    <form
+                                        method="POST"
+                                        action="<?php echo BASE_URL.'/permissions/delete_group/'.$group_permission['id']; ?>">
+                                        <input
+                                            type="submit"
+                                            value="Excluir"
+                                            onclick="return confirm('Tem certeza que deseja excluir?')"
+                                        />
+                                        <a class="button"
+                                            href="<?php echo BASE_URL.'/permissions/edit_group/'.$group_permission['id']; ?>">
+                                            Editar
+                                        </a>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+            </div>
             <div class="tab-body">
                 <a class="button" href="<?php echo BASE_URL.'/permissions/add'; ?>">Adicionar permissão</a>
                 <table width="100%">
@@ -27,7 +55,11 @@
                                 <form
                                     method="POST"
                                     action="<?php echo BASE_URL.'/permissions/delete/'.$permission['id']; ?>">
-                                    <input type="submit" value="Excluir" />
+                                    <input
+                                        type="submit"
+                                        value="Excluir"
+                                        onclick="return confirm('Tem certeza que deseja excluir?')"
+                                    />
                                 </form>
                             </td>
                         </tr>

@@ -23,6 +23,11 @@ class PermissionsController extends Controller
             header('Location: '.BASE_URL.'/login');
             exit;
         }
+
+        if (!$this->user->hasPermission('permissions_view')) {
+            header('Location: '.BASE_URL);
+            exit;
+         }
     }
 
     public function index(): void
@@ -31,12 +36,8 @@ class PermissionsController extends Controller
         $data['company_name'] = $this->company->getName();
         $data['user_email'] = $this->user->getEmail();
 
-        if (!$this->user->hasPermission('permissions_view')) {
-           header('Location: '.BASE_URL);
-           exit;
-        }
-
         $data['permissions_list'] = $this->permission->getList($this->user->getCompany());
+        $data['permissions_group_list'] = $this->permission->getGroupList($this->user->getCompany());
         $this->loadView('permissions', $data);
     }
 
@@ -45,11 +46,6 @@ class PermissionsController extends Controller
         $data = [];
         $data['company_name'] = $this->company->getName();
         $data['user_email'] = $this->user->getEmail();
-
-        if (!$this->user->hasPermission('permissions_view')) {
-           header('Location: '.BASE_URL);
-           exit;
-        }
 
         if (!empty($_POST['name'])) {
             $name = $_POST['name'];
@@ -61,13 +57,18 @@ class PermissionsController extends Controller
         $this->loadView('permissions-add', $data);
     }
 
+    public function add_group(): void
+    {
+        $data = [];
+        $data['company_name'] = $this->company->getName();
+        $data['user_email'] = $this->user->getEmail();
+
+        $data['permissions_list'] = $this->permission->getList($this->user->getCompany());
+        $this->loadView('permissions-add-group', $data);
+    }
+
     public function delete(int $id): void
     {
-        if (!$this->user->hasPermission('permissions_view')) {
-            header('Location: '.BASE_URL);
-            exit;
-        }
-
         $this->permission->delete($id);
         header('Location: '.BASE_URL.'/permissions');
     }

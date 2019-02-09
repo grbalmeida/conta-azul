@@ -59,6 +59,22 @@ class Permission extends Model
         return $array;
     }
 
+    public function getGroupList(int $company_id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT id, name FROM groups WHERE company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
+
     public function add(string $name, int $company_id): void
     {
         $sql = 'INSERT INTO permissions(name, company_id)
