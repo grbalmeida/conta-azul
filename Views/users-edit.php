@@ -20,7 +20,7 @@
                 <?php endforeach; ?>
             </select>
             <br>
-            <input type="submit" value="Adicionar" name="submit">
+            <input type="submit" value="Editar" name="submit">
             <?php if (count($errors) > 0): ?>
                 <?php foreach ($errors as $key => $value): ?>
                     <div class="error"><?php echo $errors[$key]; ?></div>

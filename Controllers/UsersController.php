@@ -101,11 +101,17 @@ class UsersController extends Controller
                 unset($data['errors']['name']);
 
             if (!count($data['errors']) > 0) {
-                $this->user->edit($id, $_POST['name'], $_POST['group']);
+                $this->user->edit($id, $_POST['name'], $_POST['group'], $this->user->getCompany());
                 header('Location: '.BASE_URL.'/users');
             }
         }
 
         $this->loadView('users-edit', $data);
+    }
+
+    public function delete(int $id): void
+    {
+        $this->user->delete($id, $this->user->getCompany());
+        header('Location: '.BASE_URL.'/users');
     }
 }

@@ -111,13 +111,26 @@ class User extends Model
         return 'E-mail já cadastrado';
     }
 
-    public function edit(int $id, string $name, int $group_id): void
+    public function edit(int $id, string $name, int $group_id, int $company_id): void
     {
-        $sql = 'UPDATE users SET name = :name, group_id = :group_id WHERE id = :id';
+        $sql = 'UPDATE users
+                SET name = :name, group_id = :group_id
+                WHERE id = :id
+                AND company_id = :company_id';
         $sql = $this->database->prepare($sql);
         $sql->bindValue(':name', $name);
         $sql->bindValue(':group_id', $group_id);
         $sql->bindValue(':id', $id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+    }
+
+    public function delete(int $id, int $company_id): void
+    {
+        $sql = 'DELETE FROM users WHERE id = :id AND company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':id', $id);
+        $sql->bindValue(':company_id', $company_id);
         $sql->execute();
     }
 
