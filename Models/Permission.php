@@ -3,6 +3,7 @@
 namespace Models;
 
 use \Core\Model;
+use \Models\User;
 
 class Permission extends Model
 {
@@ -85,6 +86,34 @@ class Permission extends Model
         $sql->execute();
     }
 
+    public function addGroup(string $permission_name, array $permissions_list, int $company_id): void
+    {
+        $sql = 'INSERT INTO groups
+                  (name, company_id)
+                VALUES
+                  (:name, :company_id)';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':name', $permission_name);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        $sql = 'SELECT MAX(id) AS max FROM groups';
+        $sql = $this->database->query($sql);
+        $group_id = $sql->fetch(\PDO::FETCH_ASSOC)['max'];
+
+        foreach ($permissions_list as $permission) {
+            $sql = 'INSERT INTO groups_has_permissions
+                      (group_id, permission_id, company_id)
+                    VALUES
+                      (:group_id, :permission_id, :company_id)';
+            $sql = $this->database->prepare($sql);
+            $sql->bindValue(':group_id', $group_id);
+            $sql->bindValue(':permission_id', $permission);
+            $sql->bindValue(':company_id', $company_id);
+            $sql->execute();
+        }
+    }
+
     public function delete(int $id): void
     {
         $sql = 'DELETE FROM groups_has_permissions WHERE permission_id = :permission_id';
@@ -96,5 +125,21 @@ class Permission extends Model
         $sql = $this->database->prepare($sql);
         $sql->bindValue(':id', $id);
         $sql->execute();
+    }
+
+    public function deleteGroup(int $group_id): void
+    {
+        $user = new User();
+        if (!$user->getCountUsersByGroupId($group_id) > 0) {
+            $sql = 'DELETE FROM groups_has_permissions WHERE group_id = :group_id';
+            $sql = $this->database->prepare($sql);
+            $sql->bindValue(':group_id', $group_id);
+            $sql->execute();
+
+            $sql = 'DELETE FROM groups WHERE id = :id';
+            $sql = $this->database->prepare($sql);
+            $sql->bindValue(':id', $group_id);
+            $sql->execute();
+        }
     }
 }

@@ -12,7 +12,11 @@
             <input type="text" name="name"><br><br>
             <label>Permissões</label><br><br>
             <?php foreach ($permissions_list as $permission): ?>
-                <input type="checkbox" name="permissions[]" id="p_<?php echo $permission['id']; ?>">
+                <input
+                    type="checkbox"
+                    name="permissions[]"
+                    id="p_<?php echo $permission['id']; ?>"
+                    value="<?php echo $permission['id']; ?>">
                 <label for="p_<?php echo $permission['id']; ?>"><?php echo $permission['name']; ?></label>
                 <br>
             <?php endforeach; ?>

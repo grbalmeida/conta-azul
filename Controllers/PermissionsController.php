@@ -27,7 +27,7 @@ class PermissionsController extends Controller
         if (!$this->user->hasPermission('permissions_view')) {
             header('Location: '.BASE_URL);
             exit;
-         }
+        }
     }
 
     public function index(): void
@@ -63,6 +63,17 @@ class PermissionsController extends Controller
         $data['company_name'] = $this->company->getName();
         $data['user_email'] = $this->user->getEmail();
 
+        if (!empty($_POST['name'])) {
+            $permission = $_POST['name'];
+            $permissions_list = [];
+
+            if (isset($_POST['permissions'])) {
+                $permissions_list = $_POST['permissions'];
+            }
+
+            $this->permission->addGroup($permission, $permissions_list, $this->user->getCompany());
+        }
+
         $data['permissions_list'] = $this->permission->getList($this->user->getCompany());
         $this->loadView('permissions-add-group', $data);
     }
@@ -70,6 +81,12 @@ class PermissionsController extends Controller
     public function delete(int $id): void
     {
         $this->permission->delete($id);
+        header('Location: '.BASE_URL.'/permissions');
+    }
+
+    public function delete_group(int $id): void
+    {
+        $this->permission->deleteGroup($id);
         header('Location: '.BASE_URL.'/permissions');
     }
 }

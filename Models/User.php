@@ -70,4 +70,14 @@ class User extends Model
     {
         return isset($this->user_info['email']) ? $this->user_info['email'] : '';
     }
+
+    public function getCountUsersByGroupId(int $group_id): int
+    {
+        $sql = 'SELECT COUNT(*) AS count FROM users WHERE group_id = :group_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':group_id', $group_id);
+        $sql->execute();
+
+        return $sql->fetch(\PDO::FETCH_ASSOC)['count'];
+    }
 }
