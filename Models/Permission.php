@@ -142,4 +142,77 @@ class Permission extends Model
             $sql->execute();
         }
     }
+
+    public function editGroup(string $name, int $group_id, array $permissions_list, int $company_id): void
+    {
+        $sql = 'UPDATE groups
+                SET name = :name
+                WHERE id = :group_id
+                AND company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':name', $name);
+        $sql->bindValue(':group_id', $group_id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        $sql = 'DELETE FROM groups_has_permissions
+                WHERE group_id = :group_id
+                AND company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue('group_id', $group_id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        foreach ($permissions_list as $permission) {
+            $sql = 'INSERT INTO groups_has_permissions
+                       (group_id, permission_id, company_id)
+                    VALUES
+                       (:group_id, :permission_id, :company_id)';
+            $sql = $this->database->prepare($sql);
+            $sql->bindValue(':group_id', $group_id);
+            $sql->bindValue(':permission_id', $permission);
+            $sql->bindValue(':company_id', $company_id);
+            $sql->execute();
+        }
+    }
+
+    public function getGroup(int $id, int $company_id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT id, name
+                FROM groups
+                WHERE id = :id
+                AND company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':id', $id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetch(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
+
+    public function getPermissionsByGroupId(int $group_id, int $company_id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT permission_id
+                FROM groups_has_permissions
+                WHERE group_id = :group_id
+                AND company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':group_id', $group_id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
 }
