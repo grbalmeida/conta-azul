@@ -51,6 +51,23 @@ class User extends Model
         }
     }
 
+    public function getList(int $company_id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT u.id, u.email, u.name AS user_name, g.name AS group_name
+                FROM users u
+                LEFT JOIN groups g
+                ON g.id = u.group_id';
+        $sql = $this->database->query($sql);
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
+
     public function logout(): void
     {
         session_destroy();

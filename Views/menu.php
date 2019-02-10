@@ -16,6 +16,12 @@
                     Permissões
                 </a>
             </li>
+            <li>
+                <a href="<?php echo BASE_URL.'/users'; ?>">
+                    <i class="material-icons">people_outline</i>
+                    Usuários
+                </a>
+            </li>
         </ul>
     </div>
 </div>
