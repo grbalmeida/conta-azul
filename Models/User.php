@@ -38,6 +38,24 @@ class User extends Model
         return false;
     }
 
+    public function getUserById(int $id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT group_id, name
+                FROM users
+                WHERE id = :id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetch(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
+
     public function setLoggedUser(): void
     {
         $sql = 'SELECT name, email, company_id, group_id FROM users WHERE id = :id';
@@ -91,6 +109,16 @@ class User extends Model
         }
 
         return 'E-mail já cadastrado';
+    }
+
+    public function edit(int $id, string $name, int $group_id): void
+    {
+        $sql = 'UPDATE users SET name = :name, group_id = :group_id WHERE id = :id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':name', $name);
+        $sql->bindValue(':group_id', $group_id);
+        $sql->bindValue(':id', $id);
+        $sql->execute();
     }
 
     public function logout(): void

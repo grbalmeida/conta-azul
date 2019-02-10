@@ -80,4 +80,32 @@ class UsersController extends Controller
 
         $this->loadView('users-add', $data);
     }
+
+    public function edit(int $id): void
+    {
+        $data = [];
+        $data['company_name'] = $this->company->getName();
+        $data['user_email'] = $this->user->getEmail();
+        $data['group_list'] = $this->permission->getGroupList($this->user->getCompany());
+        $data['user_info'] = $this->user->getUserById($id);
+        $data['errors'] = [];
+
+        if (!count($data['user_info']) > 0) {
+            header('Location: '.BASE_URL.'/users');
+        }
+
+        if (isset($_POST['submit'])) {
+            if (empty($_POST['name']))
+                $data['errors']['name'] = 'O nome é obrigatório';
+            else
+                unset($data['errors']['name']);
+
+            if (!count($data['errors']) > 0) {
+                $this->user->edit($id, $_POST['name'], $_POST['group']);
+                header('Location: '.BASE_URL.'/users');
+            }
+        }
+
+        $this->loadView('users-edit', $data);
+    }
 }
