@@ -68,19 +68,29 @@ class User extends Model
         return $array;
     }
 
-    public function add(string $name, string $email, string $password, int $group_id, int $company_id): void
+    public function add(string $name, string $email, string $password, int $group_id, int $company_id): string
     {
-        $sql = 'INSERT INTO users
+        $sql = 'SELECT COUNT(*) AS count FROM users WHERE email = :email';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':email', $email);
+        $sql->execute();
+
+        if (!$sql->fetch(\PDO::FETCH_ASSOC)['count'] > 0) {
+            $sql = 'INSERT INTO users
                    (name, email, password, group_id, company_id)
                 VALUES
                    (:name, :email, :password, :group_id, :company_id)';
-        $sql = $this->database->prepare($sql);
-        $sql->bindValue(':name', $name);
-        $sql->bindValue(':email', $email);
-        $sql->bindValue(':password', md5($password));
-        $sql->bindValue(':group_id', $group_id);
-        $sql->bindValue(':company_id', $company_id);
-        $sql->execute();
+            $sql = $this->database->prepare($sql);
+            $sql->bindValue(':name', $name);
+            $sql->bindValue(':email', $email);
+            $sql->bindValue(':password', md5($password));
+            $sql->bindValue(':group_id', $group_id);
+            $sql->bindValue(':company_id', $company_id);
+            $sql->execute();
+            return '';
+        }
+
+        return 'E-mail já cadastrado';
     }
 
     public function logout(): void

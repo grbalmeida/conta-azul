@@ -64,15 +64,17 @@ class UsersController extends Controller
                 unset($data['errors']['password']);
 
             if (!count($data['errors']) > 0) {
-                $this->user->add(
+                if (empty($this->user->add(
                     $_POST['name'],
                     $_POST['email'],
                     $_POST['password'],
                     $_POST['group'],
                     $this->user->getCompany()
-                );
+                ))) {
+                    header('Location: '.BASE_URL.'/users');
+                }
 
-                header('Location: '.BASE_URL.'/users');
+                $data['errors']['email'] = 'E-mail já cadastrado';
             }
         }
 
