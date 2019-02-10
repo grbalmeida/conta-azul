@@ -68,6 +68,21 @@ class User extends Model
         return $array;
     }
 
+    public function add(string $name, string $email, string $password, int $group_id, int $company_id): void
+    {
+        $sql = 'INSERT INTO users
+                   (name, email, password, group_id, company_id)
+                VALUES
+                   (:name, :email, :password, :group_id, :company_id)';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':name', $name);
+        $sql->bindValue(':email', $email);
+        $sql->bindValue(':password', md5($password));
+        $sql->bindValue(':group_id', $group_id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+    }
+
     public function logout(): void
     {
         session_destroy();

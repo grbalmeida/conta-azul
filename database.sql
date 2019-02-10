@@ -25,7 +25,7 @@ CREATE TABLE users(
   email varchar(50) not null,
   password varchar(32) not null,
   group_id int not null,
-  foreign key (group_id) references groups_has_permissions (id)
+  foreign key (group_id) references groups (id)
 );
 
 CREATE TABLE customers(
