@@ -22,6 +22,12 @@
                     Usuários
                 </a>
             </li>
+            <li>
+                <a href="<?php echo BASE_URL.'/customers'; ?>">
+                    <i class="material-icons">people_outline</i>
+                    Clientes
+                </a>
+            </li>
         </ul>
     </div>
 </div>
