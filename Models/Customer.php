@@ -142,4 +142,13 @@ class Customer extends Model
         $sql->bindValue(':user_id', $user_id);
         $sql->execute();
     }
+
+    public function delete(int $user_id, int $company_id): void
+    {
+        $sql = 'DELETE FROM customers WHERE id = :user_id AND company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':user_id', $user_id);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+    }
 }

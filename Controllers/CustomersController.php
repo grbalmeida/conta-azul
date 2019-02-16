@@ -169,4 +169,13 @@ class CustomersController extends Controller
             header('Location: '.BASE_URL.'/customers');
         }
     }
+
+    public function delete(int $id): void
+    {
+        if ($this->user->hasPermission('customers_edit')) {
+            $this->customer->delete($id, $this->user->getCompany());
+        }
+
+        header('Location: '.BASE_URL.'/customers');
+    }
 }
