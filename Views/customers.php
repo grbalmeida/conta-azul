@@ -49,6 +49,12 @@
             </tr>
             <?php endforeach; ?>
         </table>
+        <?php for ($count = 1; $count <= $pages_count; $count++): ?>
+            <div class="page_item pagination <?php echo $count == $current_page ? 'active_page' : ''; ?>">
+                <a href="<?php echo BASE_URL.'/customers?page='.$count; ?>"><?php echo $count; ?></a>
+            </div>
+        <?php endfor; ?>
+        <div style="clear: both;"></div>
     </div>
 </div>
 <?php $this->loadView('footer'); ?>

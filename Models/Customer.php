@@ -66,6 +66,16 @@ class Customer extends Model
         return $array;
     }
 
+    public function getCount(int $company_id): int
+    {
+        $sql = 'SELECT COUNT(*) AS count FROM customers WHERE company_id = :company_id';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        return $sql->fetch(\PDO::FETCH_ASSOC)['count'];
+    }
+
     public function add(
         int $company_id, string $name, string $email, string $phone,
         int $stars, string $note, int $number, string $address,

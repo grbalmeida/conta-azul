@@ -37,7 +37,13 @@ class CustomersController extends Controller
         $data = [];
         $data['company_name'] = $this->company->getName();
         $data['user_email'] = $this->user->getEmail();
-        $data['customers_list'] = $this->customer->getList(0, $this->user->getCompany());
+        $data['current_page'] = $_GET['page'] ?? 1;
+        $data['current_page'] = intval($data['current_page']);
+        $data['current_page'] = $data['current_page'] == 0 ? 1 : $data['current_page'];
+        $offset = (10 * ($data['current_page'] - 1));
+        $data['customers_list'] = $this->customer->getList($offset, $this->user->getCompany());
+        $data['customers_count'] = $this->customer->getCount($this->user->getCompany());
+        $data['pages_count'] = ceil($data['customers_count'] / 10);
         $data['has_permission_customers_edit'] = $this->user->hasPermission('customers_edit');
         $this->loadView('customers', $data);
     }

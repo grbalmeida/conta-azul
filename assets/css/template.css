@@ -176,3 +176,31 @@ table td {
     color: #000;
     margin-top: 20px;
 }
+
+.pagination {
+    margin-top: 30px;
+}
+
+.page_item {
+    width: 30px;
+    height: 20px;
+    float: left;
+    border: 1px solid #000;
+    margin-right: 3px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.page_item a {
+    text-decoration: none;
+    color: #000;
+}
+
+.active_page {
+    background-color: #224074;
+}
+
+.active_page a {
+    color: #fff;
+}
