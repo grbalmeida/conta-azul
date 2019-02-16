@@ -8,7 +8,7 @@
     <div class="area">
         <h1>Clientes</h1>
         <?php if ($has_permission_customers_edit): ?>
-            <a class="button" href="<?php echo BASE_URL.'/customer/add'; ?>">Adicionar cliente</a>
+            <a class="button" href="<?php echo BASE_URL.'/customers/add'; ?>">Adicionar cliente</a>
         <?php endif; ?>
         <table width="100%">
             <tr>
@@ -39,6 +39,11 @@
                             Editar
                         </a>
                     </form>
+                <?php else: ?>
+                    <a class="button"
+                        href="<?php echo BASE_URL.'/customers/details/'.$customer['id']; ?>">
+                        Visualizar
+                    </a>
                 <?php endif; ?>
                 </td>
             </tr>

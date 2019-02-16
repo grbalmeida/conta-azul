@@ -136,3 +136,6 @@ ALTER TABLE purchases_has_products ADD COLUMN company_id int not null;
 ALTER TABLE purchases_has_products ADD CONSTRAINT fk_purchase_product_company FOREIGN KEY (company_id) REFERENCES companies (id);
 
 ALTER TABLE users ADD COLUMN name varchar(100) not null;
+
+ALTER TABLE customers ADD COLUMN number INT;
+ALTER TABLE customers ADD COLUMN complement VARCHAR(100);
