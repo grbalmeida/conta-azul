@@ -37,7 +37,7 @@ class CustomersController extends Controller
         $data = [];
         $data['company_name'] = $this->company->getName();
         $data['user_email'] = $this->user->getEmail();
-        $data['customers_list'] = $this->customer->getList();
+        $data['customers_list'] = $this->customer->getList(0, $this->user->getCompany());
         $data['has_permission_customers_edit'] = $this->user->hasPermission('customers_edit');
         $this->loadView('customers', $data);
     }
@@ -98,6 +98,73 @@ class CustomersController extends Controller
             }
 
             $this->loadView('customers-add', $data);
+        } else {
+            header('Location: '.BASE_URL.'/customers');
+        }
+    }
+
+    public function edit(int $id): void
+    {
+        if ($this->user->hasPermission('customers_edit')) {
+            $data = [];
+            $data['company_name'] = $this->company->getName();
+            $data['user_email'] = $this->user->getEmail();
+            $data['customer_info'] = $this->customer->getInfo($id, $this->user->getCompany());
+            $data['errors'] = [];
+
+            if (!count($data['customer_info']) > 0) {
+                header('Location: '.BASE_URL.'/customers');
+            }
+
+            if (isset($_POST['submit'])) {
+                if (empty($_POST['name']))
+                $data['errors']['name'] = 'O nome é obrigatório';
+                else
+                    unset($data['errors']['name']);
+
+                if (!empty($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+                    $data['errors']['email'] = 'O e-mail é inválido';
+                else
+                    unset($data['errors']['email']);
+
+                if (!count($data['errors']) > 0) {
+                    $name = $_POST['name'];
+                    $email = $_POST['email'] ?? '';
+                    $phone = $_POST['phone'] ?? '';
+                    $stars = $_POST['stars'] ?? 3;
+                    $note = $_POST['note'] ?? '';
+                    $address = $_POST['address'] ?? '';
+                    $number = $_POST['number'] ?? 0;
+                    $zipcode = $_POST['zipcode'] ?? '';
+                    $city = $_POST['city'] ?? '';
+                    $state = $_POST['state'] ?? '';
+                    $country = $_POST['country'] ?? '';
+                    $neighborhood = $_POST['neighborhood'] ?? '';
+                    $complement = $_POST['complement'] ?? '';
+
+                    $this->customer->edit(
+                        $this->user->getCompany(),
+                        $id,
+                        $name,
+                        $email,
+                        $phone,
+                        intval($stars),
+                        $note,
+                        intval($number),
+                        $address,
+                        $zipcode,
+                        $city,
+                        $state,
+                        $country,
+                        $neighborhood,
+                        $complement
+                    );
+
+                    header('Location: '.BASE_URL.'/customers');
+                }
+            }
+
+            $this->loadView('customers-edit', $data);
         } else {
             header('Location: '.BASE_URL.'/customers');
         }

@@ -10,7 +10,7 @@ body {
 .left-menu {
     width: 200px;
     background-color: #1f232a;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
