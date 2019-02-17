@@ -79,7 +79,8 @@ class InventoryController extends Controller
                 $price = $_POST['price'];
                 $quantity = $_POST['quantity'];
                 $minimum_quantity = $_POST['minimum_quantity'];
-                $price = floatval(str_replace(',', '.', $price));
+                $price = str_replace('.', '', $price);
+                $price = str_replace(',', '.', $price);
 
                 $this->inventory->add($this->user->getCompany(), $this->user->getId(), $name, $price, $quantity, $minimum_quantity);
 
@@ -88,5 +89,63 @@ class InventoryController extends Controller
         }
 
         $this->loadView('inventory-add', $data);
+    }
+
+    public function edit(int $id): void
+    {
+        $data = [];
+        $data['company_name'] = $this->company->getName();
+        $data['user_email'] = $this->user->getEmail();
+        $data['inventory_info'] = $this->inventory->getInfo($id, $this->user->getCompany());
+        $data['errors'] = [];
+
+        if (!count($data['inventory_info']) > 0 || !$this->user->hasPermission('inventory_edit')) {
+            header('Location: '.BASE_URL.'/inventory');
+        }
+
+        if (isset($_POST['submit'])) {
+            if (empty($_POST['name']))
+                $data['errors']['name'] = 'Nome é obrigatório';
+            else
+                unset($data['errors']['name']);
+
+            if (empty($_POST['price']))
+                $data['errors']['price'] = 'O preço é obrigatório';
+            else
+                unset($data['errors']['price']);
+
+            if (strlen($_POST['quantity']) === 0)
+                $data['errors']['quantity'] = 'A quantidade é obrigatória';
+            else
+                unset($data['errors']['quantity']);
+
+            if (strlen($_POST['minimum_quantity']) === 0)
+                $data['errors']['minimum_quantity'] = 'A quantidade mínima é obrigatória';
+            else
+                unset($data['errors']['minimum_quantity']);
+
+            if (!count($data['errors']) > 0) {
+                $name = $_POST['name'];
+                $price = $_POST['price'];
+                $quantity = $_POST['quantity'];
+                $minimum_quantity = $_POST['minimum_quantity'];
+                $price = str_replace('.', '', $price);
+                $price = str_replace(',', '.', $price);
+
+                $this->inventory->edit($id, $this->user->getCompany(), $this->user->getId(), $name, $price, $quantity, $minimum_quantity);
+
+                header('Location: '.BASE_URL.'/inventory');
+            }
+        }
+        $this->loadView('inventory-edit', $data);
+    }
+
+    public function delete(int $id): void
+    {
+        if ($this->user->hasPermission('inventory_edit')) {
+            $this->inventory->delete($id, $this->user->getCompany(), $this->user->getId());
+        }
+
+        header('Location: '.BASE_URL.'/inventory');
     }
 }
