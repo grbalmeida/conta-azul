@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
     <script src="<?php echo BASE_URL.'/node_modules/jquery/dist/jquery.min.js'; ?>"></script>
+    <script>const BASE_URL = '<?php echo BASE_URL; ?>'</script>
     <script src="<?php echo BASE_URL.'/assets/js/script.js'; ?>"></script>
 </head>
 <body>

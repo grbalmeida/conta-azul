@@ -76,6 +76,27 @@ class Customer extends Model
         return $sql->fetch(\PDO::FETCH_ASSOC)['count'];
     }
 
+    public function getCustomersByName(string $name, int $company_id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT id, name
+                FROM customers
+                WHERE name LIKE :name
+                AND company_id = :company_id
+                LIMIT 10';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':name', '%'.$name.'%');
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
+
     public function add(
         int $company_id, string $name, string $email, string $phone,
         int $stars, string $note, int $number, string $address,

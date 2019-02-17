@@ -10,6 +10,11 @@
         <?php if ($has_permission_customers_edit): ?>
             <a class="button" href="<?php echo BASE_URL.'/customers/add'; ?>">Adicionar cliente</a>
         <?php endif; ?>
+        <input
+            type="text"
+            data-search
+            data-type="searchCustomers"
+            placeholder="Buscar usuário pelo nome..." />
         <table width="100%">
             <tr>
                 <th>Nome</th>
