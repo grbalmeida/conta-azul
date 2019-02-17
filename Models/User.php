@@ -58,7 +58,7 @@ class User extends Model
 
     public function setLoggedUser(): void
     {
-        $sql = 'SELECT name, email, company_id, group_id FROM users WHERE id = :id';
+        $sql = 'SELECT id, name, email, company_id, group_id FROM users WHERE id = :id';
         $sql = $this->database->prepare($sql);
         $sql->bindValue(':id', $_SESSION['user_id']);
         $sql->execute();
@@ -146,12 +146,17 @@ class User extends Model
 
     public function getCompany(): int
     {
-        return isset($this->user_info['company_id']) ? $this->user_info['company_id'] : 0;
+        return $this->user_info['company_id'] ?? 0;
     }
 
     public function getEmail(): string
     {
-        return isset($this->user_info['email']) ? $this->user_info['email'] : '';
+        return $this->user_info['email'] ?? '';
+    }
+
+    public function getId(): int
+    {
+        return $this->user_info['id'] ?? 0;
     }
 
     public function getCountUsersByGroupId(int $group_id): int

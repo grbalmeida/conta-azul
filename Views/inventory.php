@@ -26,23 +26,31 @@
             <?php foreach ($inventory_list as $inventory): ?>
                 <tr>
                     <td><?php echo $inventory['name']; ?></td>
-                    <td>R$ <?php echo number_format($inventory['price'], 2); ?></td>
+                    <td>R$ <?php echo number_format($inventory['price'], 2, ',', '.'); ?></td>
                     <td><?php echo $inventory['quantity']; ?></td>
-                    <td><?php echo $inventory['minimum_quantity']; ?></td>
                     <td>
-                    <form
-                        method="POST"
-                        action="<?php echo BASE_URL.'/inventory/delete/'.$inventory['id']; ?>">
-                        <input
-                            type="submit"
-                            value="Excluir"
-                            onclick="return confirm('Tem certeza que deseja excluir?')"
-                        />
-                        <a class="button"
-                            href="<?php echo BASE_URL.'/inventory/edit/'.$inventory['id']; ?>">
-                            Editar
-                        </a>
-                    </form>
+                        <?php if ($inventory['quantity'] >= $inventory['minimum_quantity']): ?>
+                            <?php echo $inventory['minimum_quantity']; ?>
+                        <?php else: ?>
+                            <span style="color: red;"><?php echo $inventory['minimum_quantity']; ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                    <?php if ($has_permission_inventory_edit): ?>
+                        <form
+                            method="POST"
+                            action="<?php echo BASE_URL.'/inventory/delete/'.$inventory['id']; ?>">
+                            <input
+                                type="submit"
+                                value="Excluir"
+                                onclick="return confirm('Tem certeza que deseja excluir?')"
+                            />
+                            <a class="button"
+                                href="<?php echo BASE_URL.'/inventory/edit/'.$inventory['id']; ?>">
+                                Editar
+                            </a>
+                        </form>
+                    <?php endif; ?>
                     </td>
                 </tr
             <?php endforeach; ?>
