@@ -28,6 +28,12 @@
                     Clientes
                 </a>
             </li>
+            <li>
+                <a href="<?php echo BASE_URL.'/inventory'; ?>">
+                    <i class="material-icons">import_export</i>
+                    Estoque
+                </a>
+            </li>
         </ul>
     </div>
 </div>

@@ -6,6 +6,7 @@ $(function() {
         $('.tab-body').hide()
         $('.tab-body').eq(item).show()
     })
+    $('.tab-body').eq(0).show()
 
     $('[data-search]').on('focus', function() {
         $(this).animate({
