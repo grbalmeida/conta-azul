@@ -139,3 +139,5 @@ ALTER TABLE users ADD COLUMN name varchar(100) not null;
 
 ALTER TABLE customers ADD COLUMN number INT;
 ALTER TABLE customers ADD COLUMN complement VARCHAR(100);
+
+ALTER TABLE sales ADD COLUMN status TINYINT(1) NOT NULL;

@@ -34,6 +34,12 @@
                     Estoque
                 </a>
             </li>
+            <li>
+                <a href="<?php echo BASE_URL.'/sales'; ?>">
+                    <i class="material-icons">attach_money</i>
+                    Vendas
+                </a>
+            </li>
         </ul>
     </div>
 </div>
