@@ -47,4 +47,15 @@ class AjaxController extends Controller
 
         echo json_encode($data);
     }
+
+    public function add_customer(): void
+    {
+        $data = [];
+
+        if(!empty($_POST['name'])) {
+            $data['id'] = $this->customer->add($this->user->getCompany(), $_POST['name']);
+        }
+
+        echo json_encode($data);
+    }
 }

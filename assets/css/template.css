@@ -234,3 +234,7 @@ table td {
     text-decoration: none;
     color: #000;
 }
+
+input[name="customer_name"] {
+    width: 250px;
+}

@@ -7,6 +7,7 @@
     <?php $this->loadView('top', ['user_email' => $viewData['user_email']]); ?>
     <div class="area">
         <h1>Vendas</h1>
+        <a class="button" href="<?php echo BASE_URL.'/sales/add'; ?>">Adicionar venda</a>
         <table width="100%">
             <tr>
                 <th>Nome do cliente</th>
@@ -18,8 +19,8 @@
             <?php foreach ($sales_list as $sale): ?>
                 <tr>
                     <td><?php echo $sale['name']; ?></td>
-                    <td><?php echo $sale['sale_date']; ?></td>
-                    <td><?php echo $sale['status']; ?></td>
+                    <td><?php echo date('d/m/Y H:i:s', strtotime($sale['sale_date'])); ?></td>
+                    <td><?php echo $sale['sale_status']; ?></td>
                     <td>R$ <?php echo number_format($sale['total_price'], 2, ',', '.'); ?></td>
                 </tr
             <?php endforeach; ?>

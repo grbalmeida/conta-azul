@@ -98,11 +98,11 @@ class Customer extends Model
     }
 
     public function add(
-        int $company_id, string $name, string $email, string $phone,
-        int $stars, string $note, int $number, string $address,
-        string $zipcode, string $city, string $state,
-        string $country, string $neighborhood, string $complement
-    ): void
+        int $company_id, string $name, string $email = '', string $phone = '',
+        int $stars = 3, string $note = '', int $number = 0, string $address = '',
+        string $zipcode = '', string $city = '', string $state = '',
+        string $country = '', string $neighborhood = '', string $complement = ''
+    ): int
     {
         $sql = 'INSERT INTO customers
                     (company_id, name, email, stars, phone,
@@ -130,6 +130,8 @@ class Customer extends Model
         $sql->bindValue(':neighborhood', $neighborhood);
         $sql->bindValue(':complement', $complement);
         $sql->execute();
+
+        return $this->database->lastInsertId();
     }
 
     public function edit(
