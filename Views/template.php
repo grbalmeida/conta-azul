@@ -8,20 +8,24 @@
     <div class="dashboard">
         <div class="grid_1">
             <div class="dashboard_grid_area">
-                <div class="dashboard_grid_area_count">99</div>
-                <div class="dashboard_grid_area_legend">Legenda</div>
+                <div class="dashboard_grid_area_count"><?php echo $products_sold; ?></div>
+                <div class="dashboard_grid_area_legend">Produtos vendidos</div>
             </div>
         </div>
         <div class="grid_1">
             <div class="dashboard_grid_area">
-                <div class="dashboard_grid_area_count">99</div>
-                <div class="dashboard_grid_area_legend">Legenda</div>
+                <div class="dashboard_grid_area_count">
+                    R$ <?php echo number_format($revenue, 2, ',', '.'); ?>
+                </div>
+                <div class="dashboard_grid_area_legend">Receitas</div>
             </div>
         </div>
         <div class="grid_1">
             <div class="dashboard_grid_area">
-                <div class="dashboard_grid_area_count">99</div>
-                <div class="dashboard_grid_area_legend">Legenda</div>
+                <div class="dashboard_grid_area_count">
+                    R$ <?php echo number_format($expenses, 2, ',', '.'); ?>
+                </div>
+                <div class="dashboard_grid_area_legend">Despesas</div>
             </div>
         </div>
     </div>

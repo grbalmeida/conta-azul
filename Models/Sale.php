@@ -116,4 +116,34 @@ class Sale extends Model
                 INNER JOIN customers c
                 ON s.customer_id = c.id';
     }
+
+    public function getTotalRevenue(int $company_id): float
+    {
+        $sql = 'SELECT COALESCE(TRUNCATE(SUM(total_price), 2), 0) AS total_revenue
+                FROM sales
+                WHERE company_id = :company_id
+                AND sale_date
+                BETWEEN ADDDATE(NOW(), INTERVAL - 1 MONTH) AND NOW()';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        return $sql->fetch(\PDO::FETCH_ASSOC)['total_revenue'];
+    }
+
+    public function getTotalProducts(int $company_id): int
+    {
+        $sql = 'SELECT COALESCE(SUM(shp.quantity), 0) AS total_products
+                FROM sales_has_products shp
+                INNER JOIN sales s
+                ON shp.sale_id = s.id
+                WHERE shp.company_id = :company_id
+                AND s.sale_date
+                BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        return $sql->fetch(\PDO::FETCH_ASSOC)['total_products'];
+    }
 }
