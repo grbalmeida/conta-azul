@@ -40,6 +40,12 @@
                     Vendas
                 </a>
             </li>
+            <li>
+                <a href="<?php echo BASE_URL.'/reports'; ?>">
+                    <i class="material-icons">print</i>
+                    Relatórios
+                </a>
+            </li>
         </ul>
     </div>
 </div>

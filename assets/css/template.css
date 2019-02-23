@@ -238,3 +238,28 @@ table td {
 input[name="customer_name"] {
     width: 250px;
 }
+
+.report_item {
+    width: 150px;
+    height: 140px;
+    background-color: #ccc;
+    float: left;
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: 17px;
+    line-height: 140px;
+}
+
+.report_item a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+}
+
+.report_grid_4 {
+    width: 25%;
+    height: 150px;
+    float: left;
+    text-align: center
+}
