@@ -263,3 +263,68 @@ input[name="customer_name"] {
     float: left;
     text-align: center
 }
+
+.dashboard {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.grid_1 {
+    width: 33%;
+    height: 100px;
+    float: left;
+}
+
+.grid_2 {
+    margin-left: 5px;
+    margin-right: 15px;
+    width: 64%;
+    float: left;
+}
+
+.grid_3 {
+    width: 100%;
+}
+
+.dashboard_grid_area {
+    background-color: #ccc;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 100px;
+    padding-left: 20px;
+}
+
+.grid_1:nth-child(1) .dashboard_grid_area {
+    margin-left: 5px;
+}
+
+.grid_1:nth-child(3) .dashboard_grid_area {
+    margin-right: 0;
+}
+
+.dashboard_grid_area_count {
+    font-size: 28px;
+    padding-top: 20px;
+}
+
+.dashboard_grid_area_legend {
+    font-size: 14px;
+}
+
+.dashboard_info {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.dashboard_info_title {
+    height: 40px;
+    line-height: 40px;
+    font-size: 17px;
+    padding-left: 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+.dashboard_info_body {
+    padding: 10px;
+}
