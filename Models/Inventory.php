@@ -15,13 +15,8 @@ class Inventory extends Model
     {
         $array = [];
 
-        $sql = 'SELECT id,
-                       name,
-                       price,
-                       quantity,
-                       minimum_quantity
-                FROM inventory
-                WHERE company_id = :company_id
+        $sql = $this->getDefaultSelectThatReturnInventory();
+        $sql .= ' WHERE company_id = :company_id
                 AND id NOT IN
                     (select product_id from inventory_history where product_id = inventory.id and inventory_history.action = \'del\')
                 LIMIT '.$offset.', 10';
@@ -34,6 +29,34 @@ class Inventory extends Model
         }
 
         return $array;
+    }
+
+    public function getFilteredInventory(int $company_id): array
+    {
+        $array = [];
+
+        $sql = $this->getDefaultSelectThatReturnInventory();
+        $sql .= ' WHERE company_id = :company_id';
+        $sql .= ' AND quantity <= minimum_quantity';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        return $array;
+    }
+
+    private function getDefaultSelectThatReturnInventory(): string
+    {
+        return 'SELECT id,
+                    name,
+                    price,
+                    quantity,
+                    minimum_quantity
+                FROM inventory';
     }
 
     public function getInfo(int $inventory_id, int $company_id): array

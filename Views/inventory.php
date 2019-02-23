@@ -52,7 +52,7 @@
                         </form>
                     <?php endif; ?>
                     </td>
-                </tr
+                </tr>
             <?php endforeach; ?>
         </table>
     </div>
