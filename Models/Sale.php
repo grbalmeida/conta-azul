@@ -146,4 +146,63 @@ class Sale extends Model
 
         return $sql->fetch(\PDO::FETCH_ASSOC)['total_products'];
     }
+
+    public function getRevenueList(int $company_id, string $first_period, string $final_period): array
+    {
+        $array = [];
+        $currentDay = $first_period;
+
+        while ($final_period != $currentDay) {
+            $array[$currentDay] = 0;
+            $currentDay = date('Y-m-d', strtotime('+1 day', strtotime($currentDay)));
+        }
+
+        $sql = 'SELECT DATE_FORMAT(s.sale_date, \'%Y-%m-%d\') AS sale_date,
+                SUM(total_price) AS total_price
+                FROM sales s
+                WHERE company_id = :company_id
+                AND s.sale_date
+                BETWEEN :first_period AND :final_period
+                GROUP BY DATE_FORMAT(s.sale_date, \'%Y-%m-%d\')';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->bindValue(':first_period', $first_period);
+        $sql->bindValue(':final_period', $final_period);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $rows = $sql->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($rows as $sale_item) {
+                $array[$sale_item['sale_date']] = $sale_item['total_price'];
+            }
+        }
+
+        return array_values($array);
+    }
+
+    public function getQuantityStatusList(int $company_id): array
+    {
+        $array = [];
+
+        $sql = 'SELECT COUNT(*) AS total, status
+                FROM sales
+                WHERE company_id = :company_id
+                AND sale_date BETWEEN
+                ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
+                GROUP BY status';
+        $sql = $this->database->prepare($sql);
+        $sql->bindValue(':company_id', $company_id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $rows = $sql->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($rows as $sale_item) {
+                $array[$sale_item['status']] = $sale_item['total'];
+            }
+        }
+
+        return array_values($array);
+    }
 }
